@@ -43,7 +43,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Library;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType.SizeMetrics;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Stroker;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -593,7 +592,7 @@ public class FreeTypeFontGenerator implements Disposable {
 			}
 		}
 
-		Rectangle rect = packer.pack(mainPixmap);
+		PixmapPacker.PixmapPackerRectangle rect = packer.pack(mainPixmap);
 		glyph.page = packer.getPages().size - 1; // Glyph is always packed into the last page for now.
 		glyph.srcX = (int)rect.x;
 		glyph.srcY = (int)rect.y;
