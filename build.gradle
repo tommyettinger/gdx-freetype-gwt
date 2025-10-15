@@ -1,17 +1,28 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.34.0'
+    }
+}
+
+apply plugin: 'java-library'
+apply plugin: 'com.vanniktech.maven.publish'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply from: 'deploy.gradle'
-
 
 group = 'com.github.intrigus.gdx-freetype-gwt'
-version = '1.9.11-SNAPSHOT'
+version = '1.13.5-SNAPSHOT'
 archivesBaseName = "gdx-freetype-gwt"
 
-
 ext {
-    gdxVersion = "1.9.11-SNAPSHOT"
-    gwtVersion = "2.8.2"
+    gdxVersion = "1.13.5"
+    gwtVersion = "2.11.0"
 }
 
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -19,42 +30,64 @@ ext {
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.test.java.srcDirs = [ "test/" ]
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
-//Get dependencies from Maven central repository
-repositories {
-    mavenCentral()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-}
-
-
-//Project dependencies
-dependencies {
-	compileOnly "com.google.gwt:gwt-user:$gwtVersion"
-	compileOnly "com.google.gwt:gwt-dev:$gwtVersion"
-	compileOnly "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-	compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"	
-	
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name 'gdx-freetype-gwt'
-                artifactId 'gdx-freetype-gwt'
-                packaging 'jar'
-                description 'Gdx Freetype for use with GWT.'
+// Disable JDK 8's doclint
+// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc).tap {
+            configureEach {
+                // The -quiet is because of some sort of weird JDK JavaCompiler bug:
+                // https://discuss.gradle.org/t/passing-arguments-to-compiler-and-javadoc/1661
+                options.addStringOption('Xdoclint:none,-missing', '-quiet')
+                options.tags('apiNote:a:"API Note"', 'implSpec:a:"Implementation Requirements"', 'implNote:a:"Implementation Note"')
             }
         }
     }
+}
+
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
+mavenPublishing {
+    configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
+}
+plainJavadocJar.archiveBaseName.set("gdx-freetype-gwt")
+
+java.sourceCompatibility = 1.8
+java.targetCompatibility = 1.8
+apply plugin: 'idea'
+idea.module.excludeDirs += [file("src/com/badlogic/gdx/graphics/g2d/freetype/gwt/emu/")]
+
+if (JavaVersion.current().isJava9Compatible()) {
+    compileJava.targetCompatibility = 8
+    allprojects {
+        tasks.withType(JavaCompile).tap {
+            configureEach {
+                options.release.set(8)
+            }
+        }
+    }
+}
+
+jar {
+    archiveBaseName.set("gdx-freetype-gwt")
+    manifest {
+        attributes 'Implementation-Title': 'gdx-freetype-gwt', 'Implementation-Version': archiveVersion
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://jitpack.io' }
+}
+
+//Project dependencies
+dependencies {
+	compileOnly "org.gwtproject:gwt-user:$gwtVersion"
+	compileOnly "org.gwtproject:gwt-dev:$gwtVersion"
+	compileOnly "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+	compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"	
+	
 }
