@@ -57,6 +57,7 @@ java.sourceCompatibility = 1.8
 java.targetCompatibility = 1.8
 apply plugin: 'idea'
 idea.module.excludeDirs += [file("src/com/badlogic/gdx/graphics/g2d/freetype/gwt/emu/")]
+[compileJava, compileTestJava, javadoc]*.exclude("com/badlogic/gdx/graphics/g2d/freetype/gwt/emu/")
 
 if (JavaVersion.current().isJava9Compatible()) {
     compileJava.targetCompatibility = 8
