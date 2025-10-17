@@ -21,7 +21,7 @@ version = '1.13.5-SNAPSHOT'
 archivesBaseName = "gdx-freetype-gwt"
 
 ext {
-    gdxVersion = "1.13.5"
+    gdxVersion = "1.14.0-SNAPSHOT"
     gwtVersion = "2.11.0"
 }
 

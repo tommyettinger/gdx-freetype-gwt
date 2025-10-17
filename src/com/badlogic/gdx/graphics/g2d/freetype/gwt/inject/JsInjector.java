@@ -16,13 +16,16 @@
 
 package com.badlogic.gdx.graphics.g2d.freetype.gwt.inject;
 
-/** Stub interface, here to trigger the {@link JsInjectorGenerator} so we can get all .js files and inject them
+/** Stub interface, here to trigger the
+ * {@link com.badlogic.gdx.graphics.g2d.freetype.gwt.FreetypeInjector}
+ * so we can get all .js files and inject them.
  * @author Simon Gerst */
 public interface JsInjector {
 	/** @return returns all injectables i.e. classes that implement {@link Injectable} */
 	Injectable[] getInjectables ();
 
-	/** Represents a .js script that needs to be injected, it is ensured that the script is injected. See {@link FreetypeInjector}
+	/** Represents a .js script that needs to be injected, it is ensured that the script is injected. See
+     * {@link com.badlogic.gdx.graphics.g2d.freetype.gwt.FreetypeInjector}
 	 * in gdx-freetype-gwt for an example. You can only use GWT in those methods, you can not use libgdx! */
 	public static interface Injectable {
 		/** @return return true if the injection succeeded */
