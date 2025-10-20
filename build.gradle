@@ -17,11 +17,11 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 group = 'com.github.intrigus.gdx-freetype-gwt'
-version = '1.13.5-SNAPSHOT'
+version = '1.14.0'
 archivesBaseName = "gdx-freetype-gwt"
 
 ext {
-    gdxVersion = "1.14.0-SNAPSHOT"
+    gdxVersion = "1.14.0"
     gwtVersion = "2.11.0"
 }
 
@@ -51,7 +51,7 @@ import com.vanniktech.maven.publish.JavadocJar
 mavenPublishing {
     configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
 }
-plainJavadocJar.archiveBaseName.set("gdx-freetype-gwt")
+plainJavadocJar.archiveBaseName.set(archivesBaseName)
 
 java.sourceCompatibility = 1.8
 java.targetCompatibility = 1.8
@@ -71,14 +71,14 @@ if (JavaVersion.current().isJava9Compatible()) {
 }
 
 jar {
-    archiveBaseName.set("gdx-freetype-gwt")
+    archiveBaseName.set(archivesBaseName)
     manifest {
         attributes 'Implementation-Title': 'gdx-freetype-gwt', 'Implementation-Version': archiveVersion
     }
 }
 
 repositories {
-//    mavenLocal()
+    mavenLocal()
     mavenCentral()
     maven { url 'https://central.sonatype.com/repository/maven-snapshots/' }
     maven { url 'https://jitpack.io' }
@@ -89,6 +89,6 @@ dependencies {
 	compileOnly "org.gwtproject:gwt-user:$gwtVersion"
 	compileOnly "org.gwtproject:gwt-dev:$gwtVersion"
 	compileOnly "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-	compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"	
+	compileOnly "com.badlogicgames.gdx:gdx:$gdxVersion"
 	
 }

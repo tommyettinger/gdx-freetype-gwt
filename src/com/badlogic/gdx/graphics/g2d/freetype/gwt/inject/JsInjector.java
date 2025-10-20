@@ -27,7 +27,7 @@ public interface JsInjector {
 	/** Represents a .js script that needs to be injected, it is ensured that the script is injected. See
      * {@link com.badlogic.gdx.graphics.g2d.freetype.gwt.FreetypeInjector}
 	 * in gdx-freetype-gwt for an example. You can only use GWT in those methods, you can not use libgdx! */
-	public static interface Injectable {
+	interface Injectable {
 		/** @return return true if the injection succeeded */
 		boolean isSuccess ();
 

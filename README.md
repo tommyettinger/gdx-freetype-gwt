@@ -7,7 +7,7 @@ You have to use a matching libGDX and gdx-freetype-gwt version.
 See this table for compatibility.
 | libGDX   | gdx-freetype-gwt |  Note  |
 |:--------:|:----------------:|:------:|
-| 1.9.11-SNAPSHOT | 1.9.11-SNAPSHOT   |    |
+| 1.14.0 | 1.14.0   |    |
 | 1.9.10 | 1.9.10.1 |  Fixes https://github.com/intrigus/gdx-freetype-gwt/issues/9 |
 | 1.9.10 | 1.9.10 |  Don't use. Use 1.9.10.1 instead |
 
@@ -26,8 +26,8 @@ after
 
 Add 
 ````
- implementation "com.github.intrigus.gdx-freetype-gwt:gdx-freetype-gwt:$version"
- implementation "com.github.intrigus.gdx-freetype-gwt:gdx-freetype-gwt:$version:sources"
+implementation "com.github.tommyettinger:gdx-freetype-gwt:1.14.0"
+implementation "com.github.tommyettinger:gdx-freetype-gwt:1.14.0:sources"
 ````
 
 3. Modify your `HtmlLauncher.java` (or if it's not named so, modify the class in your `html` project that extends `GwtApplication`)
@@ -35,14 +35,8 @@ Add
 Add
 ````java
 @Override
-public void onModuleLoad () {
-	FreetypeInjector.inject(new OnCompletion() {
-		public void run () {
-			// Replace HtmlLauncher with the class name
-			// If your class is called FooBar.java than the line should be FooBar.super.onModuleLoad();
-			HtmlLauncher.super.onModuleLoad();
-		}
-	});
+public void onModuleLoad() {
+    com.badlogic.gdx.graphics.g2d.freetype.gwt.FreetypeInjector.inject(super::onModuleLoad);
 }
 ````
 
